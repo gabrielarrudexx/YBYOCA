@@ -1,4 +1,4 @@
-entrypoint = "python run.py"
+entrypoint = "backend/main.py"
 
 [packager]
 language = "python3"
@@ -16,9 +16,11 @@ startTimeout = 30
 [nix]
 channel = "stable-23_11"
 
-# Variáveis de ambiente para o Replit
 [env]
 PORT = "8000"
 SECRET_KEY = "YBYOCA_SECRET_KEY_REPLIT_PRODUCTION_SECURE"
 DATABASE_URL = "sqlite:///./ybyoca.db"
 UPLOAD_DIR = "uploads"
+
+[interpreter]
+command = ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
