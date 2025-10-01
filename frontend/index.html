@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ybyoca - Gestão de Obras</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/frontend/style.css">
+    <link rel="icon" href="/frontend/logo.jpg" type="image/jpeg">
+</head>
+<body class="font-sans">
+
+    <!-- Tela de Login -->
+    <div id="login-view" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -top-40 -right-40 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
+            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse" style="animation-delay: 2s;"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-cyan-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse" style="animation-delay: 4s;"></div>
+        </div>
+
+        <!-- Login Container -->
+        <div class="relative z-10 w-full max-w-md px-4">
+            <div class="card text-center">
+                <!-- Logo com animação -->
+                <div class="mb-8 relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full blur-lg opacity-30 animate-pulse"></div>
+                    <img src="/frontend/logo.jpg" alt="Logo Ybyoca" class="relative mx-auto w-32 h-32 object-contain drop-shadow-lg transform hover:scale-105 transition-transform duration-300">
+                </div>
+
+                <!-- Título com gradiente -->
+                <h1 class="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Bem-vindo ao Ybyoca
+                </h1>
+                <p class="text-gray-600 mb-8">Sua plataforma inteligente de gestão de obras</p>
+
+                <!-- Formulário -->
+                <form id="login-form" class="space-y-6">
+                    <div class="text-left">
+                        <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">E-mail</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
+                                </svg>
+                            </div>
+                            <input type="text" id="email" class="input-style pl-10" placeholder="seu@email.com" required>
+                        </div>
+                    </div>
+
+                    <div class="text-left">
+                        <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">Senha</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                            </div>
+                            <input type="password" id="password" class="input-style pl-10" placeholder="••••••••" required>
+                        </div>
+                    </div>
+
+                    <div id="login-error" class="text-red-500 text-sm hidden bg-red-50 p-3 rounded-lg border border-red-200"></div>
+
+                    <button type="submit" class="btn-primary w-full text-lg py-4 relative overflow-hidden group">
+                        <span class="relative z-10">Entrar no Sistema</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </button>
+                </form>
+
+                <!-- Footer do login -->
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <p class="text-sm text-gray-500">
+                        Precisa de ajuda?
+                        <a href="#" class="text-blue-600 hover:text-blue-700 font-medium transition-colors">Entre em contato</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Mobile e Overlay -->
+    <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18M3 6h18M3 18h18"></path>
+        </svg>
+    </button>
+
+    <div class="mobile-overlay" id="mobile-overlay"></div>
+
+    <div class="mobile-sidebar" id="mobile-sidebar">
+        <div class="mobile-sidebar-header">
+            <span>Menu Ybyoca</span>
+            <button class="mobile-sidebar-close" id="mobile-sidebar-close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="mobile-sidebar-content">
+            <div class="space-y-4">
+                <h3 class="font-semibold text-gray-700">Ações Rápidas</h3>
+                <button id="mobile-create-client" class="btn-primary btn-small">+ Novo Cliente</button>
+                <button id="mobile-create-project" class="btn-primary btn-small">+ Novo Projeto</button>
+                <hr>
+                <button id="mobile-logout" class="btn-secondary btn-small">Sair</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Painel do Arquiteto - Versão Responsiva -->
+    <div id="architect-view" class="hidden">
+        <!-- Header Responsivo -->
+        <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50 border-b border-gray-100">
+            <div class="container-responsive py-4">
+                <div class="flex-responsive center">
+                    <button class="mobile-menu-toggle hide-desktop" id="header-menu-toggle">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 12h18M3 6h18M3 18h18"></path>
+                        </svg>
+                    </button>
+                    <div class="text-center">
+                        <h1 class="text-title bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Painel do Arquiteto</h1>
+                        <p class="text-sm text-gray-600 mt-1">Gestão completa de projetos</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Analytics -->
+        <div class="container-responsive py-6">
+            <!-- Cards de Métricas em Grid Responsivo -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-medium text-gray-700">Total de Projetos</h3>
+                        <div class="bg-blue-50 p-2 rounded-lg">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900" id="dashboard-total-projects">0</p>
+                    <p class="text-xs text-gray-500 mt-1">Projetos cadastrados</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-medium text-gray-700">Projetos Ativos</h3>
+                        <div class="bg-green-50 p-2 rounded-lg">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900" id="dashboard-active-projects">0</p>
+                    <p class="text-xs text-gray-500 mt-1">Em andamento</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-medium text-gray-700">Total Investido</h3>
+                        <div class="bg-amber-50 p-2 rounded-lg">
+                            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900" id="dashboard-total-invested">R$ 0</p>
+                    <p class="text-xs text-gray-500 mt-1">Em todos os projetos</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-medium text-gray-700">Clientes Ativos</h3>
+                        <div class="bg-purple-50 p-2 rounded-lg">
+                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="text-2xl font-bold text-gray-900" id="dashboard-active-clients">0</p>
+                    <p class="text-xs text-gray-500 mt-1">Clientes cadastrados</p>
+                </div>
+            </div>
+
+            <!-- Layout Principal com 3 Colunas Bem Definidas -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Coluna Esquerda: Navegação e Listas (4 colunas) -->
+                <div class="lg:col-span-4 space-y-6">
+                    <!-- Card de Clientes -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="p-4 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-lg font-semibold text-gray-900">Clientes</h2>
+                                <button id="show-create-client-modal" class="bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
+                                    + Novo Cliente
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div id="client-list" class="space-y-2 max-h-64 overflow-y-auto"></div>
+                        </div>
+                    </div>
+
+                    <!-- Card de Projetos Ativos -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="p-4 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-lg font-semibold text-gray-900">Projetos Ativos</h2>
+                                <button id="show-create-project-modal" class="bg-green-600 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-green-700 transition-colors">
+                                    + Novo Projeto
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div id="project-list-architect" class="space-y-2 max-h-64 overflow-y-auto"></div>
+                        </div>
+                    </div>
+
+                    <!-- Card de Projetos Concluídos -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                        <div class="p-4 border-b border-gray-200">
+                            <h2 class="text-lg font-semibold text-gray-900">Obras Concluídas</h2>
+                        </div>
+                        <div class="p-4">
+                            <div id="completed-projects-list-architect" class="space-y-2 max-h-48 overflow-y-auto"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna Central: Detalhes do Projeto (8 colunas) -->
+                <div class="lg:col-span-8">
+                    <div id="architect-project-details" class="bg-white rounded-lg shadow-sm border border-gray-200 hidden">
+                        <!-- Header do Projeto -->
+                        <div class="p-6 border-b border-gray-200">
+                            <h2 class="text-2xl font-bold text-gray-900 mb-6" id="details-project-name"></h2>
+
+                            <!-- Cards Financeiros -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-blue-50 rounded-lg p-4 border border-blue-100">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-100 rounded-lg p-2 mr-3">
+                                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-blue-900">Orçamento Total</p>
+                                            <p class="text-xl font-bold text-blue-600" id="details-project-budget">R$ 0</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-red-50 rounded-lg p-4 border border-red-100">
+                                    <div class="flex items-center">
+                                        <div class="bg-red-100 rounded-lg p-2 mr-3">
+                                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-red-900">Gasto Total</p>
+                                            <p class="text-xl font-bold text-red-600" id="details-project-spent">R$ 0</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-green-50 rounded-lg p-4 border border-green-100">
+                                    <div class="flex items-center">
+                                        <div class="bg-green-100 rounded-lg p-2 mr-3">
+                                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-medium text-green-900">Saldo Restante</p>
+                                            <p class="text-xl font-bold text-green-600" id="details-project-remaining">R$ 0</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Progresso Financeiro -->
+                        <div class="p-6 border-b border-gray-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Progresso Financeiro</h3>
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-2xl font-bold text-gray-900" id="progress-percentage">0%</span>
+                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium" id="progress-status">Em Andamento</span>
+                                </div>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
+                                <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-green-500 h-6 rounded-full transition-all duration-500 flex items-center justify-center" style="width: 0%">
+                                    <span class="text-white text-xs font-semibold"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lista de Despesas -->
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-lg font-semibold text-gray-900">Despesas Lançadas</h3>
+                                <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium" id="expenses-count">0 itens</span>
+                            </div>
+                            <div id="expense-list-architect" class="space-y-4 max-h-96 overflow-y-auto"></div>
+                        </div>
+
+                        <!-- Área de Lançamento de Despesas -->
+                        <div class="p-6 bg-gray-50 border-t border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-6">Lançar Nova Despesa</h3>
+
+                            <!-- Selector de Categorias -->
+                            <div class="mb-6">
+                                <p class="text-sm font-medium text-gray-700 mb-3">Categoria da Despesa</p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="expenseCategory" value="material" class="sr-only peer" checked>
+                                        <div class="category-btn p-4 border-2 rounded-lg transition-all peer-checked:border-blue-500 peer-checked:bg-blue-50 hover:bg-gray-50 text-center">
+                                            <svg class="w-6 h-6 mx-auto mb-2 text-gray-600 peer-checked:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                            </svg>
+                                            <span class="text-sm font-medium text-gray-900 peer-checked:text-blue-900">Matéria Prima</span>
+                                        </div>
+                                    </label>
+
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="expenseCategory" value="labor" class="sr-only peer">
+                                        <div class="category-btn p-4 border-2 rounded-lg transition-all peer-checked:border-green-500 peer-checked:bg-green-50 hover:bg-gray-50 text-center">
+                                            <svg class="w-6 h-6 mx-auto mb-2 text-gray-600 peer-checked:text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                            </svg>
+                                            <span class="text-sm font-medium text-gray-900 peer-checked:text-green-900">Mão de Obra</span>
+                                        </div>
+                                    </label>
+
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="expenseCategory" value="misc" class="sr-only peer">
+                                        <div class="category-btn p-4 border-2 rounded-lg transition-all peer-checked:border-amber-500 peer-checked:bg-amber-50 hover:bg-gray-50 text-center">
+                                            <svg class="w-6 h-6 mx-auto mb-2 text-gray-600 peer-checked:text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span class="text-sm font-medium text-gray-900 peer-checked:text-amber-900">Custos Variados</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Formulários Mobile-Friendly -->
+                            <div class="space-y-4">
+                                <!-- Form Matéria Prima -->
+                                <form id="form-materia-prima" class="expense-form space-y-4">
+                                    <input type="hidden" name="category" value="Matéria Prima">
+                                    <div>
+                                        <label for="mp-name" class="block text-sm font-medium text-gray-700 mb-1">Nome do Produto</label>
+                                        <input type="text" id="mp-name" name="name" class="input-style" required placeholder="Ex: Cimento CP II">
+                                    </div>
+                                    <div class="grid-responsive cols-2 gap-3">
+                                        <div>
+                                            <label for="mp-value" class="block text-sm font-medium text-gray-700 mb-1">Valor (R$)</label>
+                                            <input type="number" id="mp-value" name="value" step="0.01" class="input-style" required placeholder="0,00">
+                                        </div>
+                                        <div>
+                                            <label for="mp-photo" class="block text-sm font-medium text-gray-700 mb-1">Foto</label>
+                                            <input type="file" id="mp-photo" name="photo" class="input-style" accept="image/*" required>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn-primary">Adicionar Matéria Prima</button>
+                                </form>
+
+                                <!-- Form Mão de Obra -->
+                                <form id="form-mao-de-obra" class="expense-form space-y-4 hidden">
+                                    <input type="hidden" name="category" value="Mão de Obra">
+                                    <div>
+                                        <label for="mo-name" class="block text-sm font-medium text-gray-700 mb-1">Descrição do Serviço</label>
+                                        <input type="text" id="mo-name" name="name" class="input-style" required placeholder="Ex: Serviço de pedreiro">
+                                    </div>
+                                    <div>
+                                        <label for="mo-value" class="block text-sm font-medium text-gray-700 mb-1">Valor (R$)</label>
+                                        <input type="number" id="mo-value" name="value" step="0.01" class="input-style" required placeholder="0,00">
+                                    </div>
+                                    <button type="submit" class="btn-primary">Adicionar Mão de Obra</button>
+                                </form>
+
+                                <!-- Form Custos Variados -->
+                                <form id="form-custos-variados" class="expense-form space-y-4 hidden">
+                                    <input type="hidden" name="category" value="Custos Variados">
+                                    <div>
+                                        <label for="cv-name" class="block text-sm font-medium text-gray-700 mb-1">Descrição do Custo</label>
+                                        <input type="text" id="cv-name" name="name" class="input-style" required placeholder="Ex: Aluguel de equipamento">
+                                    </div>
+                                    <div>
+                                        <label for="cv-value" class="block text-sm font-medium text-gray-700 mb-1">Valor (R$)</label>
+                                        <input type="number" id="cv-value" name="value" step="0.01" class="input-style" required placeholder="0,00">
+                                    </div>
+                                    <button type="submit" class="btn-primary">Adicionar Custo Variado</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Botão de Finalização -->
+                        <div class="mt-6 pt-6 border-t">
+                            <button id="finalize-project-button" class="btn-secondary btn-large w-full">Finalizar Obra</button>
+                        </div>
+                    </div>
+
+                    <!-- Estado Vazio -->
+                    <div id="empty-state" class="bg-white rounded-lg shadow-sm border border-gray-200 text-center py-16">
+                        <div class="w-20 h-20 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+                            <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Nenhum Projeto Selecionado</h3>
+                        <p class="text-gray-600 mb-6 max-w-md mx-auto">Selecione um projeto na lista à esquerda para visualizar e gerenciar todos os detalhes, despesas e acompanhamento.</p>
+                        <button id="empty-create-project" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors inline-flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            Criar Novo Projeto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer com Botão Sair -->
+        <footer class="bg-white border-t border-gray-200 mt-8 sticky bottom-0 z-40 shadow-sm">
+            <div class="container-responsive py-4">
+                <div class="flex items-center justify-between">
+                    <div class="text-sm text-gray-600">
+                        © 2024 Ybyoca - Sistema de Gestão de Obras
+                    </div>
+                    <button id="logout-button" class="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors inline-flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        Sair do Sistema
+                    </button>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Painel do Cliente - Versão Premium -->
+    <div id="client-view" class="hidden">
+        <!-- Header Premium do Cliente -->
+        <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg relative">
+            <!-- Botão Voltar -->
+            <button id="back-to-selection" class="absolute top-6 left-4 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-300 shadow-lg">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+
+            <div class="container-responsive py-6">
+                <div class="flex-responsive center">
+                    <div class="text-center">
+                        <h1 class="text-3xl md:text-4xl font-bold mb-2">Meu projeto</h1>
+                        <p class="text-blue-100" id="client-welcome">Acompanhamento em tempo real</p>
+                    </div>
+                </div>
+
+                <!-- Status Badge -->
+                <div class="text-center mt-4">
+                    <div class="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                        <div class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                        <span class="text-sm font-medium">Projeto Ativo</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Premium -->
+        <div class="container-responsive py-6">
+            <!-- KPIs Principais -->
+            <div class="grid-responsive cols-1 md:cols-2 lg:cols-4 mb-8">
+                <!-- Card Orçamento -->
+                <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-xl transform hover:scale-105 transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-white/20 p-3 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-2xl font-bold">💰</span>
+                    </div>
+                    <h3 class="text-sm text-blue-100 mb-1">Orçamento Total</h3>
+                    <p class="text-2xl font-bold" id="client-budget">R$ 0</p>
+                    <div class="mt-3 bg-white/20 rounded-full h-2">
+                        <div class="bg-white h-2 rounded-full" style="width: 0%" id="budget-progress"></div>
+                    </div>
+                </div>
+
+                <!-- Card Investido -->
+                <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white shadow-xl transform hover:scale-105 transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-white/20 p-3 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-2xl font-bold">📊</span>
+                    </div>
+                    <h3 class="text-sm text-green-100 mb-1">Total Investido</h3>
+                    <p class="text-2xl font-bold" id="client-spent">R$ 0</p>
+                    <p class="text-xs text-green-100 mt-2" id="spent-percentage">0% do orçamento</p>
+                </div>
+
+                <!-- Card Saldo -->
+                <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white shadow-xl transform hover:scale-105 transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-white/20 p-3 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-2xl font-bold">💎</span>
+                    </div>
+                    <h3 class="text-sm text-purple-100 mb-1">Saldo Disponível</h3>
+                    <p class="text-2xl font-bold" id="client-remaining">R$ 0</p>
+                    <div class="mt-3 flex items-center text-xs">
+                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                        </svg>
+                        <span id="remaining-status">Dentro do orçamento</span>
+                    </div>
+                </div>
+
+                <!-- Card Progresso -->
+                <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-xl p-6 text-white shadow-xl transform hover:scale-105 transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-white/20 p-3 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-2xl font-bold">⚡</span>
+                    </div>
+                    <h3 class="text-sm text-orange-100 mb-1">Progresso da Obra</h3>
+                    <p class="text-2xl font-bold" id="client-progress">0%</p>
+                    <div class="mt-3 bg-white/20 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-yellow-300 to-yellow-400 h-2 rounded-full transition-all duration-500" style="width: 0%" id="progress-bar-client"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráfico Visual de Progresso -->
+            <div class="grid-responsive cols-1 lg:cols-3 gap-6 mb-8">
+                <!-- Timeline Visual -->
+                <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                        </svg>
+                        Linha do Tempo da Obra
+                    </h2>
+
+                    <!-- Timeline de Despesas -->
+                    <div id="client-timeline" class="space-y-4 max-h-96 overflow-y-auto pr-4">
+                        <div class="text-center py-8 text-gray-500">
+                            <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <p>Carregando histórico da obra...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estatísticas Rápidas -->
+                <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
+                    <h3 class="text-lg font-bold mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        Estatísticas
+                    </h3>
+
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Total de Despesas</span>
+                            <span class="font-bold" id="total-expenses">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Média por Item</span>
+                            <span class="font-bold" id="avg-expense">R$ 0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Maior Despesa</span>
+                            <span class="font-bold" id="max-expense">R$ 0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Categoria Principal</span>
+                            <span class="font-bold" id="main-category">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Dias de Obra</span>
+                            <span class="font-bold" id="days-active">0</span>
+                        </div>
+                    </div>
+
+                    <!-- Mini Progress Circle -->
+                    <div class="mt-6 text-center">
+                        <div class="relative inline-flex items-center justify-center">
+                            <svg class="w-20 h-20 transform -rotate-90">
+                                <circle cx="40" cy="40" r="30" stroke="currentColor" stroke-width="6" fill="none" opacity="0.2"></circle>
+                                <circle cx="40" cy="40" r="30" stroke="white" stroke-width="6" fill="none"
+                                        stroke-dasharray="188.5" stroke-dashoffset="188.5"
+                                        id="progress-circle" style="transition: stroke-dashoffset 0.5s ease"></circle>
+                            </svg>
+                            <span class="absolute text-lg font-bold" id="progress-circle-text">0%</span>
+                        </div>
+                        <p class="text-xs mt-2 opacity-90">Conclusão Estimada</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Área de Detalhes das Despesas -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Detalhes Financeiros
+                    </h2>
+                    <div class="flex space-x-2">
+                        <button class="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-200 transition" id="filter-all">Todos</button>
+                        <button class="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full hover:bg-gray-200 transition" id="filter-material">Matéria Prima</button>
+                        <button class="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full hover:bg-gray-200 transition" id="filter-labor">Mão de Obra</button>
+                        <button class="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full hover:bg-gray-200 transition" id="filter-misc">Custos</button>
+                    </div>
+                </div>
+
+                <!-- Grid de Despesas -->
+                <div id="client-expenses-grid" class="grid-responsive cols-1 md:cols-2 lg:cols-3 gap-4">
+                    <div class="text-center py-12 col-span-full">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                        </svg>
+                        <p class="text-gray-500">Carregando despesas...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Área de Feedback e Comunicação -->
+            <div class="grid-responsive cols-1 lg:cols-2 gap-6 mb-8">
+                <!-- Feedback Rápido -->
+                <div class="bg-gradient-to-r from-teal-500 to-cyan-600 rounded-xl shadow-lg p-6 text-white">
+                    <h3 class="text-lg font-bold mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                        Feedback Rápido
+                    </h3>
+                    <p class="text-sm text-teal-100 mb-4">Como você está avaliando o andamento da obra?</p>
+
+                    <div class="space-y-3">
+                        <button class="w-full bg-white/20 hover:bg-white/30 transition py-3 rounded-lg flex items-center justify-between px-4" onclick="sendFeedback('excelent')">
+                            <span>😊 Excelente</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                            </svg>
+                        </button>
+                        <button class="w-full bg-white/20 hover:bg-white/30 transition py-3 rounded-lg flex items-center justify-between px-4" onclick="sendFeedback('good')">
+                            <span>🙂 Bom</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                            </svg>
+                        </button>
+                        <button class="w-full bg-white/20 hover:bg-white/30 transition py-3 rounded-lg flex items-center justify-between px-4" onclick="sendFeedback('concerned')">
+                            <span>😟 Preocupado</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </button>
+                        <button class="w-full bg-white/20 hover:bg-white/30 transition py-3 rounded-lg flex items-center justify-between px-4" onclick="sendFeedback('contact')">
+                            <span>📞 Falar com Arquiteto</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Últimas Atualizações -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                        </svg>
+                        Notificações
+                    </h3>
+
+                    <div id="client-notifications" class="space-y-3 max-h-64 overflow-y-auto">
+                        <div class="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-800">Bem-vindo ao sistema!</p>
+                                <p class="text-xs text-gray-500">Agora</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Premium -->
+        <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white shadow-2xl">
+            <div class="container-responsive py-6">
+                <div class="grid-responsive cols-1 md:cols-3 gap-6">
+                    <div>
+                        <h4 class="font-semibold mb-2">Contato Rápido</h4>
+                        <p class="text-sm text-gray-400">Precisa de ajuda? Estamos aqui para você.</p>
+                    </div>
+                    <div class="text-center">
+                        <button id="logout-button-client" class="bg-red-600 hover:bg-red-700 transition px-6 py-2 rounded-lg flex items-center mx-auto">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                            Sair do Sistema
+                        </button>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-gray-400">Versão Premium</p>
+                        <p class="text-xs text-gray-500">Sistema Ybyoca Enterprise</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+        <!-- Painel de Seleção de Obra (Cliente) -->
+        <div id="client-project-selection-view" class="hidden">
+            <div class="container-responsive py-6">
+                <div class="text-center mb-6">
+                    <h1 class="text-title text-gray-800">Minhas Obras</h1>
+                </div>
+                <div class="card">
+                    <h2 class="text-subtitle text-gray-700 mb-4">Por favor, selecione a obra que deseja visualizar:</h2>
+                    <div id="client-projects-list" class="space-y-4">
+                        <!-- Lista de obras preenchida por JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer com Botão Sair -->
+            <footer class="bg-white border-t shadow-lg mt-8 sticky bottom-0 z-40">
+                <div class="container-responsive py-4">
+                    <div class="flex-responsive center">
+                        <button id="logout-button-selection" class="btn-secondary btn-small">
+                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                            Sair do Sistema
+                        </button>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    <!-- Painel de Obra Concluída (Cliente) - Versão Premium -->
+    <div id="completed-client-view" class="hidden">
+        <!-- Header de Celebração -->
+        <header class="bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg relative">
+            <!-- Botão Voltar -->
+            <button id="back-to-selection-from-completed" class="absolute top-6 left-4 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-300 shadow-lg">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+
+            <div class="container-responsive py-8">
+                <div class="text-center">
+                    <div class="mb-4">
+                        <div class="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full mb-4">
+                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-bold mb-2">🎉 Obra Concluída com Sucesso!</h1>
+                    <p class="text-green-100 text-lg" id="completed-welcome">Parabéns pela realização do seu projeto!</p>
+                </div>
+
+                <!-- Badges de Conquista -->
+                <div class="flex justify-center space-x-4 mt-6">
+                    <div class="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path>
+                        </svg>
+                        <span class="text-sm font-medium">Projeto Entregue</span>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                        </svg>
+                        <span class="text-sm font-medium">Qualidade Garantida</span>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        <span class="text-sm font-medium">Satisfação Garantida</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard de Conclusão -->
+        <div class="container-responsive py-8">
+            <!-- Cards Resumo Premium -->
+            <div class="grid-responsive cols-1 md:cols-2 lg:cols-4 mb-8">
+                <!-- Card Orçamento vs Realizado -->
+                <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-white/20 p-3 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-2xl font-bold">📋</span>
+                    </div>
+                    <h3 class="text-sm text-blue-100 mb-1">Orçamento Inicial</h3>
+                    <p class="text-2xl font-bold" id="completed-project-budget">R$ 0</p>
+                    <div class="mt-2 text-xs text-blue-100">Planejado inicialmente</div>
+                </div>
+
+                <!-- Card Custo Final -->
+                <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white shadow-xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-white/20 p-3 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-2xl font-bold">💰</span>
+                    </div>
+                    <h3 class="text-sm text-green-100 mb-1">Custo Final</h3>
+                    <p class="text-2xl font-bold" id="completed-project-spent">R$ 0</p>
+                    <div class="mt-2 text-xs text-green-100">Total investido</div>
+                </div>
+
+                <!-- Card Economia/Estouro -->
+                <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white shadow-xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-white/20 p-3 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-2xl font-bold">📈</span>
+                    </div>
+                    <h3 class="text-sm text-purple-100 mb-1">Economia/Estouro</h3>
+                    <p class="text-2xl font-bold" id="completed-project-remaining">R$ 0</p>
+                    <div class="mt-2 text-xs text-purple-100" id="difference-percentage">0% do orçamento</div>
+                </div>
+
+                <!-- Card Duração -->
+                <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-xl p-6 text-white shadow-xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="bg-white/20 p-3 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-2xl font-bold">⏱️</span>
+                    </div>
+                    <h3 class="text-sm text-orange-100 mb-1">Duração da Obra</h3>
+                    <p class="text-2xl font-bold" id="completed-project-duration">0 dias</p>
+                    <div class="mt-2 text-xs text-orange-100">Tempo total executado</div>
+                </div>
+            </div>
+
+            <!-- Timeline das Despesas Concluídas -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Histórico Completo de Investimentos
+                    </h2>
+                </div>
+
+                <!-- Timeline Concluída -->
+                <div id="completed-expenses-list" class="space-y-4 max-h-96 overflow-y-auto pr-4">
+                    <div class="text-center py-8 text-gray-500">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                        </svg>
+                        <p>Carregando histórico completo...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ações Finais -->
+            <div class="grid-responsive cols-1 md:cols-3 gap-6 mb-8">
+                <button onclick="downloadFullReport()" class="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 flex items-center justify-center print-hide">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Baixar Relatório Completo
+                </button>
+                <button onclick="shareResults()" class="bg-gradient-to-r from-green-600 to-green-700 text-white py-4 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m9.032 4.026a9.001 9.001 0 01-7.432 0m9.032-4.026A9.001 9.001 0 0112 3c-4.474 0-8.268 3.12-9.032 7.326m0 0A9.001 9.001 0 0012 21c4.474 0 8.268-3.12 9.032-7.326"></path>
+                    </svg>
+                    Compartilhar Resultados
+                </button>
+                <button onclick="contactForNewProject()" class="bg-gradient-to-r from-purple-600 to-purple-700 text-white py-4 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    </svg>
+                    Novo Projeto
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer Premium Conclusão -->
+        <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white shadow-2xl">
+            <div class="container-responsive py-6">
+                <div class="grid-responsive cols-1 md:cols-3 gap-6">
+                    <div>
+                        <h4 class="font-semibold mb-2">Agradecemos a Confiança!</h4>
+                        <p class="text-sm text-gray-400">Foi um prazer realizar seu sonho.</p>
+                    </div>
+                    <div class="text-center">
+                        <button id="logout-button-completed-client" class="bg-red-600 hover:bg-red-700 transition px-6 py-2 rounded-lg flex items-center mx-auto">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                            Sair do Sistema
+                        </button>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-gray-400">Missão Cumprida</p>
+                        <p class="text-xs text-gray-500">Ybyoca Arquitetura & Design</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+
+    <!-- Modals -->
+    <div id="create-client-modal" class="modal-background hidden">
+        <div class="card modal-content">
+            <h2 class="text-2xl font-semibold mb-4">Novo Cliente</h2>
+            <form id="create-client-form" class="space-y-4">
+                <div>
+                    <label for="client-email" class="block text-sm font-medium text-gray-700">E-mail do Cliente</label>
+                    <input type="email" id="client-email" class="input-style" required>
+                </div>
+                <div>
+                    <label for="client-password" class="block text-sm font-medium text-gray-700">Senha Provisória</label>
+                    <input type="text" id="client-password" class="input-style" required>
+                </div>
+                <div class="flex justify-end space-x-2 pt-4">
+                    <button type="button" id="cancel-create-client" class="btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Cliente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="create-project-modal" class="modal-background hidden">
+        <div class="card modal-content">
+            <h2 class="text-2xl font-semibold mb-4">Novo Projeto</h2>
+            <form id="create-project-form" class="space-y-4">
+                <div>
+                    <label for="project-name" class="block text-sm font-medium text-gray-700">Nome da Obra</label>
+                    <input type="text" id="project-name" class="input-style" required>
+                </div>
+                <div>
+                    <label for="project-budget" class="block text-sm font-medium text-gray-700">Orçamento Previsto (R$)</label>
+                    <input type="number" id="project-budget" step="0.01" class="input-style" required>
+                </div>
+                <div>
+                    <label for="project-client-select" class="block text-sm font-medium text-gray-700">Vincular ao Cliente</label>
+                    <select id="project-client-select" class="input-style" required></select>
+                </div>
+                <div class="flex justify-end space-x-2 pt-4">
+                    <button type="button" id="cancel-create-project" class="btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Projeto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/frontend/app.js"></script>
+</body>
+</html>

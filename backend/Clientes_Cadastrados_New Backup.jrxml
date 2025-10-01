@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="custom_report" pageWidth="841" pageHeight="595" orientation="Landscape" columnWidth="771" leftMargin="28" rightMargin="42" topMargin="28" bottomMargin="42">
+	<property name="ireport.zoom" value="1.3080639266124634"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.definition"/>
+	<style name="Zebrado" mode="Opaque" forecolor="#333333" backcolor="#FFFFFF">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean(($V{COLUMN_COUNT}.intValue() % 2) == 0)]]></conditionExpression>
+			<style mode="Opaque" forecolor="#333333" backcolor="#E4E3E3"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="NOME_REL" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NOME_MODULO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="pCidade" class="java.lang.String">
+		<property name="nomeTabela" value="TSICID"/>
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pVend" class="java.lang.String">
+		<property name="nomeTabela" value="TGFVEN"/>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PDIR_MODELO" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT  PAR.CODPARC AS "Nro do Cliente", PAR.AD_NOMFANTASISA As "Desc. Cliente" , CID.NOMECID As "Cidade_1",
+        ULT.NUMNOTA  AS "Nro nota"  ,
+        ULT.DTNEG AS "Dt.Negoc.",
+        ULT.VLRNOTA AS "VLR_Nota_Consid_Devol"
+   FROM TGFPAR PAR
+   JOIN TSICID CID ON (CID.CODCID = PAR.CODCID)
+                        AND (PAR.CLIENTE = 'S')
+   LEFT JOIN (SELECT CAB.NUMNOTA, CAB.CODPARC, CAB.CODVEND, CAB.DTNEG, CAB.VLRNOTA  FROM TGFCAB CAB
+               WHERE CAB.TIPMOV = 'P'
+                 AND CAB.CODTIPOPER IN (34,145,228,169,239,231)
+                 AND CAB.HRMOV = (SELECT MAX(CAB2.HRMOV) FROM TGFCAB CAB2 WHERE CAB2.CODPARC = CAB.CODPARC AND CAB2.TIPMOV = 'P'
+                                     AND CAB2.CODTIPOPER IN (34,145,228,169,239,231)
+                                     AND CAB2.DTNEG = (SELECT MAX(CAB3.DTNEG) FROM TGFCAB CAB3 WHERE CAB3.TIPMOV = 'P'
+                                                          AND CAB3.CODTIPOPER IN (34,145,228,169,239,231) AND CAB3.CODPARC = CAB2.CODPARC)))
+                     ULT ON (ULT.CODPARC = PAR.CODPARC)
+
+   WHERE (CID.CODCID = NVL($P{pCidade},CID.CODCID) OR CID.CODCID IS NULL  )
+     AND (PAR.CODVEND = NVL($P{pVend},PAR.CODVEND))
+     AND PAR.ATIVO = 'S'
+ ORDER BY PAR.CODPARC]]>
+	</queryString>
+	<field name="Nro do Cliente" class="java.lang.Integer"/>
+	<field name="Desc. Cliente" class="java.lang.String"/>
+	<field name="Cidade_1" class="java.lang.String"/>
+	<field name="Nro nota" class="java.lang.Integer"/>
+	<field name="Dt.Negoc." class="java.sql.Timestamp"/>
+	<field name="VLR_Nota_Consid_Devol" class="java.lang.Double"/>
+	<sortField name="Nro do Cliente"/>
+	<variable name="TQRExpr_14_0_sum_var" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{VLR_Nota_Consid_Devol}]]></variableExpression>
+	</variable>
+	<variable name="TQRExpr_12_0_sum_var" class="java.lang.Double" resetType="Group" resetGroup="group_1" calculation="Sum">
+		<variableExpression><![CDATA[($F{VLR_Nota_Consid_Devol})]]></variableExpression>
+	</variable>
+	<group name="group_1">
+		<groupExpression><![CDATA[$F{Cidade_1}]]></groupExpression>
+	</group>
+	<title>
+		<band height="60">
+			<staticText>
+				<reportElement x="0" y="0" width="771" height="60" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="16" isBold="true" pdfFontName="Helvetica" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Clientes Cadastrados: Ultimas Compras]]></text>
+			</staticText>
+			<image>
+				<reportElement x="22" y="0" width="201" height="60"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{PDIR_MODELO} + "1.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="17"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="18">
+			<rectangle>
+				<reportElement x="654" y="0" width="117" height="18" backcolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="578" y="0" width="76" height="18" backcolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="523" y="0" width="55" height="18" backcolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="351" y="0" width="173" height="18" backcolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="0" width="55" height="18" backcolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="55" y="0" width="296" height="18" forecolor="#000000" backcolor="#CCCCCC"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="55" height="18" forecolor="#000000" backcolor="#666666"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Courier New" size="8" isBold="true" pdfFontName="br/com/sankhya/modelcore/report/font/courbd.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[NºCliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="55" y="0" width="296" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="Courier New" size="8" isBold="true" pdfFontName="br/com/sankhya/modelcore/report/font/courbd.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="0" width="173" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="Courier New" size="8" isBold="true" pdfFontName="br/com/sankhya/modelcore/report/font/courbd.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ Cidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="654" y="0" width="117" height="18"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="none">
+					<font fontName="Courier New" size="8" isBold="true" pdfFontName="br/com/sankhya/modelcore/report/font/courbd.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Total da Compra]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="578" y="0" width="77" height="18"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Courier New" size="8" isBold="true" pdfFontName="br/com/sankhya/modelcore/report/font/courbd.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Ultima Compra]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="522" y="0" width="56" height="18"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Courier New" size="8" isBold="true" pdfFontName="br/com/sankhya/modelcore/report/font/courbd.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Nº Nota]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11">
+			<textField pattern="###0" isBlankWhenNull="true">
+				<reportElement style="Zebrado" x="1" y="0" width="54" height="11"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8" pdfFontName="br/com/sankhya/modelcore/report/font/cour.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{Nro do Cliente}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###,###,###,##0.00;-###,###,###,##0.00" isBlankWhenNull="true">
+				<reportElement style="Zebrado" x="654" y="0" width="116" height="11"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8" pdfFontName="br/com/sankhya/modelcore/report/font/cour.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{VLR_Nota_Consid_Devol}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="Zebrado" x="55" y="0" width="296" height="11"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8" pdfFontName="br/com/sankhya/modelcore/report/font/cour.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Desc. Cliente}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="Zebrado" x="351" y="0" width="174" height="11"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8" pdfFontName="br/com/sankhya/modelcore/report/font/cour.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Cidade_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0" isBlankWhenNull="true">
+				<reportElement style="Zebrado" x="525" y="0" width="53" height="11"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8" pdfFontName="br/com/sankhya/modelcore/report/font/cour.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{Nro nota}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement style="Zebrado" x="578" y="0" width="76" height="11"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Courier New" size="8" pdfFontName="br/com/sankhya/modelcore/report/font/cour.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{Dt.Negoc.}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="42">
+			<textField isBlankWhenNull="true">
+				<reportElement x="578" y="3" width="193" height="7"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Courier New" size="6" isBold="true" pdfFontName="br/com/sankhya/modelcore/report/font/cour.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" Página: " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="9" width="379" height="10"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Courier New" size="6" isBold="true" pdfFontName="br/com/sankhya/modelcore/report/font/cour.ttf" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[(" Emissão " + new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new java.util.Date()))]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

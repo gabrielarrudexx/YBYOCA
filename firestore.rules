@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Regra padrão: nega toda a leitura e escrita por padrão.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Coleção 'users': Armazena o papel (role) de cada usuário (arquiteto ou cliente).
+    match /users/{userId} {
+      // Um usuário pode criar seu próprio documento de perfil ao se registrar.
+      // Um usuário pode ler seu próprio perfil para verificar seu papel.
+      allow read, create: if request.auth.uid == userId;
+    }
+
+    // Função auxiliar para verificar se o usuário autenticado é um arquiteto.
+    function isArchitect() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'architect';
+    }
+
+    // Coleção 'clients': Armazena os dados dos clientes.
+    match /clients/{clientId} {
+      // CRIAR: Um arquiteto pode criar um documento de cliente, 
+      // desde que o ID do arquiteto no novo documento seja o seu próprio.
+      allow create: if isArchitect() && request.resource.data.architectId == request.auth.uid;
+      
+      // LER, ATUALIZAR: Um arquiteto pode ler e atualizar clientes que ele gerencia.
+      allow read, update: if isArchitect() && resource.data.architectId == request.auth.uid;
+
+      // LER: Um cliente pode ler seu próprio documento de dados (para encontrar o ID da sua obra).
+      // A verificação é feita pelo e-mail, que é o elo entre a autenticação e o documento.
+      allow read: if request.auth.token.email == resource.data.email;
+    }
+
+    // Coleção 'projects': Armazena as obras.
+    match /projects/{projectId} {
+      // CRIAR, LER, ATUALIZAR: Um arquiteto pode gerenciar completamente os projetos que criou.
+      allow create: if isArchitect() && request.resource.data.architectId == request.auth.uid;
+      allow read, update: if isArchitect() && resource.data.architectId == request.auth.uid;
+
+      // LER: Qualquer usuário autenticado pode ler os dados de um projeto. 
+      // A lógica no frontend é responsável por mostrar apenas o projeto relevante para o cliente.
+      // A escrita e atualização permanecem seguras.
+      allow read: if request.auth != null;
+    }
+
+    // Coleção 'quotations': Armazena as cotações de materiais.
+    match /quotations/{quotationId} {
+      // LER: Qualquer usuário autenticado pode ler cotações.
+      allow read: if request.auth != null;
+
+      // CRIAR: Um usuário autenticado (cliente) pode criar uma cotação.
+      // A regra garante que o status inicial seja 'Em Análise'.
+      allow create: if request.auth != null && request.resource.data.status == 'Em Análise';
+
+      // ATUALIZAR: Apenas o arquiteto responsável pelo projeto da cotação pode atualizá-la (aprovar).
+      // Esta é uma regra de segurança crítica.
+      allow update: if isArchitect() && 
+                     get(/databases/$(database)/documents/projects/$(resource.data.projectId)).data.architectId == request.auth.uid;
+    }
+  }
+}
